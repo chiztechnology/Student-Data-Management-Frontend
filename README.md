@@ -1,6 +1,7 @@
 <a name="readme-top"></a>
 
 <div align="center">
+    <img src='./directed-logo.png' alt='Company Logo'/>
   <h1><b>Student Data Management Frontend</b></h1>
 </div>
 
