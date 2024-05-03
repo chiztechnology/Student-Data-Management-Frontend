@@ -27,8 +27,8 @@ export const updateRecord = async (route, data)=>{
     return result;
 }
 
-export const deleteRecord = async (route, data)=>{
-    let result = await axios.delete(`${baseapi}${route}`, data)
+export const deleteRecord = async (route, id)=>{
+    let result = await axios.delete(`${baseapi}${route}`, {data: {id: id}})
         .then(response => response.data)
         .catch(error => { throw error })
 

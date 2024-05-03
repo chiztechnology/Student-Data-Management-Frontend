@@ -4,6 +4,7 @@ import { AppstoreOutlined, FormOutlined, InboxOutlined, LockOutlined, MailOutlin
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -85,10 +86,13 @@ const items: MenuItem[] = [
   // },
 ];
 
+
+
 const Sidebar: React.FC = () => {
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e.key);
-  };
+
+  const router= useRouter();
+
+  const onClick: MenuProps['onClick'] = (e) => { router.push(`/${e.key}`)  };
 
   return (
     <div className='flex flex-col h-full bg-green-100'>

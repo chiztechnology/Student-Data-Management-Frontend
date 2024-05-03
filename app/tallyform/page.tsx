@@ -7,19 +7,17 @@ import { fetchData, addRecord, updateRecord, deleteRecord } from '../helpers'
 
 interface DataType {
     id: number;
-    pseudonym: string,
-    name: string,
-    email: string,
-    age: number,
-    gender: string,
-    grade_level: number
+    student_id: number,
+    type: string,
+    date: string,
+    responses: string,
 }
 
 
 const { Search } = Input;
 
 
-const Students = () => {
+const TallyForm = () => {
     // modal 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(0);
@@ -30,7 +28,7 @@ const Students = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        let tempData = fetchData('/students');
+        let tempData = fetchData('/tallyForms');
         tempData.then(response => setData(response))
 
     }, [data])
@@ -51,9 +49,9 @@ const Students = () => {
         setSaveLoading(true);
         let tempSubmit;
         if (isEditing) {
-            tempSubmit = updateRecord('/students', values);
+            tempSubmit = updateRecord('/tallyForms', values);
         } else {
-            tempSubmit = addRecord('/students', values);
+            tempSubmit = addRecord('/tallyForms', values);
         }
         tempSubmit.then(result => {
             if (result.success === 1) {
@@ -70,15 +68,13 @@ const Students = () => {
         })
     };
 
-    const OpenEdition = (record : object) => {
+    const OpenEdition = (record: object) => {
         form.setFieldsValue({
             id: record.id,
-            pseudonym: record.pseudonym,
-            name: record.name,
-            email: record.email,
-            age: record.age,
-            gender: record.gender,
-            grade_level: record.grade_level
+            student_id: record.student_id,
+            type: record.type,
+            date: record.date,
+            responses: record.responses,
         });
         setIsEditing(true);
         setIsModalOpen(true);
@@ -86,7 +82,7 @@ const Students = () => {
 
     const confirm: PopconfirmProps['onConfirm'] = (record) => {
         setDeleteId(record.id);
-        let tempDelete = deleteRecord('/students', record.id);
+        let tempDelete = deleteRecord('/tallyForms', record.id);
         tempDelete.then(response => {
             if (response.success === 1) {
                 console.log(response)
@@ -114,34 +110,26 @@ const Students = () => {
             render: (text) => <a>{text}</a>,
         },
         {
-            title: 'Pseudonym',
-            dataIndex: 'pseudonym',
-            key: 'pseudonym',
+            title: 'Student ID',
+            dataIndex: 'student_id',
+            key: 'student_id',
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'type',
+            render: (_, record) => (
+                <Tag color='green'>{record.type}</Tag>
+            )
+        },{
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
-        },
-        {
-            title: 'Gender',
-            dataIndex: 'gender',
-            key: 'gender',
-        },
-        {
-            title: 'Grade level',
-            dataIndex: 'grade_level',
-            key: 'grade_level',
+            title: 'Responses',
+            dataIndex: 'responses',
+            key: 'responses',
         },
         {
             title: 'Action',
@@ -151,7 +139,7 @@ const Students = () => {
                     <Button type='dashed' onClick={() => OpenEdition(record)}>Update</Button>
                     <Popconfirm
                         title="Confirmation"
-                        description="Are you sure to delete this Student ?"
+                        description="Are you sure to delete this record ?"
                         onConfirm={() => confirm(record)}
                         onCancel={cancel}
                         okText="Yes"
@@ -167,17 +155,17 @@ const Students = () => {
 
     return (
         <div className='w-full p-4'>
-            <h2 className='text-4xl font-bold ml-6 text-blue-300'>Students ({data ? data.length : 0})</h2>
+            <h2 className='text-4xl font-bold ml-6 text-blue-300'>Tally Forms Integration ({data ? data.length : 0})</h2>
             {/* filters */}
             <div className='flex p-2 m-4 float-right'>
                 <Search placeholder="Search" style={{ width: 200 }} />
-                <Button className='ml-2' type='primary' icon={<PlusOutlined />} size='middle' onClick={() => { setIsEditing(false); showModal() }}>Add a new Student</Button>
+                <Button className='ml-2' type='primary' icon={<PlusOutlined />} size='middle' onClick={() => { setIsEditing(false); showModal() }}>Add a new Tally Integration</Button>
             </div>
             {/* data grid */}
             <Table bordered className='ml-4 mr-4' rowKey={'id'} columns={columns} dataSource={data ? data : []} />
-            <Modal title={isEditing ? "Update this Student" : "Create New Student"} open={isModalOpen} centered onOk={handleOk} onCancel={handleCancel} footer={false}>
+            <Modal title={isEditing ? "Update this Tally form" : "Create New Tally Integration"} open={isModalOpen} centered onOk={handleOk} onCancel={handleCancel} footer={false}>
                 <Form
-                    name="student"
+                    name="tallyforms"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 16 }}
                     style={{ maxWidth: 400, marginTop: 10 }}
@@ -193,52 +181,37 @@ const Students = () => {
                     </Form.Item>
 
                     <Form.Item<FieldType>
-                        label="Pseudonym"
-                        name="pseudonym"
-                        rules={[{ required: true, message: 'Please type your pseudonym!' }]}
+                        label="Student ID"
+                        name="student_id"
+                        rules={[{ required: true, message: 'Please type the student ID!' }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item<FieldType>
-                        label="Name"
-                        name="name"
-                        rules={[{ required: true, message: 'Please type your name!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Email"
-                        name="email"
-                        rules={[{ required: true, message: 'Please type your Email!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Age"
-                        name="age"
-                        rules={[{ required: true, message: 'Please input your Age!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Gender"
-                        name="gender"
-                        rules={[{ required: true, message: 'Please select your gender!' }]}
-                    >
-                        <Select>
-                            <option value={'male'}>Male</option>
-                            <option value={'female'}>Female</option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Grade Level"
-                        name="grade_level"
-                        rules={[{ required: true, message: 'Please type your grade!' }]}
+                        label="Type"
+                        name="type"
+                        rules={[{ required: true, message: 'Please enter a valid type!' }]}
                     >
                         <Input />
                     </Form.Item>
 
+                    <Form.Item<FieldType>
+                        label="Date"
+                        name="date"
+                        rules={[{ required: true, message: 'Please enter the date!' }]}
+                    >
+                        <Input type='date'/>
+                    </Form.Item>
+                    
+                    <Form.Item<FieldType>
+                        label="responses"
+                        name="responses"
+                        rules={[{ required: true, message: 'Please enter the responses !' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit" icon={<SaveOutlined />} style={{ float: 'right' }}>
                             {isEditing ? 'Update' : 'Save'}
@@ -250,4 +223,4 @@ const Students = () => {
     )
 };
 
-export default Students;
+export default TallyForm;
