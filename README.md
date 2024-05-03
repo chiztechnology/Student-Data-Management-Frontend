@@ -129,7 +129,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## 🚀Live Demo <a name="livedemo"></a>
 
-Watch the video presentation of this app [by clicking on this link](#nolink)
+Watch the video presentation of this app [by clicking on this link](https://www.loom.com/share/c2f144bf10154878a64aceefe1105b3e)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
