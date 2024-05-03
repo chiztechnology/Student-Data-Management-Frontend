@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Popconfirm, Select, Space, Table, Tag, message } from 'antd';
-import type { FormProps, PopconfirmProps, TableProps } from 'antd';
-import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import { fetchData, addRecord, updateRecord, deleteRecord } from '../helpers'
+import { Button, Dropdown, Form, Input, Modal, Popconfirm, Select, Space, Table, Tag, Upload, message } from 'antd';
+import type { FormProps, MenuProps, PopconfirmProps, TableProps } from 'antd';
+import { InboxOutlined, PlusOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { fetchData, addRecord, updateRecord, deleteRecord, exportToExcel, UploadXLS } from '../helpers'
 
 interface DataType {
     id: number;
@@ -70,7 +70,7 @@ const Students = () => {
         })
     };
 
-    const OpenEdition = (record : object) => {
+    const OpenEdition = (record: object) => {
         form.setFieldsValue({
             id: record.id,
             pseudonym: record.pseudonym,
@@ -164,12 +164,15 @@ const Students = () => {
         },
     ];
 
-
     return (
         <div className='w-full p-4'>
             <h2 className='text-4xl font-bold ml-6 text-blue-300'>Students ({data ? data.length : 0})</h2>
             {/* filters */}
             <div className='flex p-2 m-4 float-right'>
+                <UploadXLS url={'/students'}/>
+
+                <Button className='ml-2 mr-4' type="dashed" icon={<SendOutlined />} size='middle' onClick={()=>exportToExcel(data, 'students')}>Export data</Button>
+
                 <Search placeholder="Search" style={{ width: 200 }} />
                 <Button className='ml-2' type='primary' icon={<PlusOutlined />} size='middle' onClick={() => { setIsEditing(false); showModal() }}>Add a new Student</Button>
             </div>

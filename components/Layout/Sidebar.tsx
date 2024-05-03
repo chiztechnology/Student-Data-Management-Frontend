@@ -63,17 +63,17 @@ const Sidebar: React.FC = () => {
       <Menu
         onClick={onClick}
         className='bg-green-100'
-        style={{ width: 256, marginTop:20, height:'100%' }}
+        style={{ width: 256, marginTop:20, height:'83vh' }}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
         items={items}
       />
-      <div className='bg-[#3a5341] rounded-xl m-4 pb-4 flex flex-col justify-center items-center'>
+      {/* <div className='bg-[#3a5341] rounded-xl m-4 pb-4 flex flex-col justify-center items-center'>
                 <h2 className='font-bold text-white'>Settings</h2>
                 <Button className='mt-1' type="dashed" icon={<InboxOutlined />} size='middle'>Import CSV File</Button>
                 <Button className='mt-1' type="default" icon={<SendOutlined />} size='middle'>Export data to CSV</Button>
-      </div>
+      </div> */}
     </div>
   );
 };

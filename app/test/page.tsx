@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Modal, Popconfirm, Select, Space, Table, Tag, message } from 'antd';
 import type { FormProps, PopconfirmProps, TableProps } from 'antd';
-import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import { fetchData, addRecord, updateRecord, deleteRecord } from '../helpers'
+import { PlusOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { fetchData, addRecord, updateRecord, deleteRecord, exportToExcel, UploadXLS } from '../helpers'
 
 interface DataType {
     id: number;
@@ -121,7 +121,7 @@ const Test = () => {
             render: (_, record) => (
                 <Tag color='green'>{record.type}</Tag>
             )
-        },{
+        }, {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
@@ -158,6 +158,9 @@ const Test = () => {
             <h2 className='text-4xl font-bold ml-6 text-blue-300'>Tests ({data ? data.length : 0})</h2>
             {/* filters */}
             <div className='flex p-2 m-4 float-right'>
+                <UploadXLS url={'/tests'} />
+
+                <Button className='ml-2 mr-4' type="dashed" icon={<SendOutlined />} size='middle' onClick={() => exportToExcel(data, 'test')}>Export data</Button>
                 <Search placeholder="Search" style={{ width: 200 }} />
                 <Button className='ml-2' type='primary' icon={<PlusOutlined />} size='middle' onClick={() => { setIsEditing(false); showModal() }}>Add a new Test</Button>
             </div>
@@ -201,9 +204,9 @@ const Test = () => {
                         name="date"
                         rules={[{ required: true, message: 'Please enter the date!' }]}
                     >
-                        <Input type='date'/>
+                        <Input type='date' />
                     </Form.Item>
-                    
+
                     <Form.Item<FieldType>
                         label="Score"
                         name="score"
@@ -211,7 +214,7 @@ const Test = () => {
                     >
                         <Input />
                     </Form.Item>
-                    
+
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit" icon={<SaveOutlined />} style={{ float: 'right' }}>
                             {isEditing ? 'Update' : 'Save'}
